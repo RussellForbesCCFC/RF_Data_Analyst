@@ -104,3 +104,54 @@ def assign_zone_to_start_thirds(row):
             start_zone.append(name)
 
     return start_zone[0]
+
+
+def assign_zone_to_pass_carry_shot_thirds(row):
+    event_start_x = row["location_x"]
+    event_start_y = row["location_y"]
+    event_end_x = row["end_location_x"]
+    event_end_y = row["end_location_y"]
+
+    positional_x_range = [0, 18, 40, 60, 80, 102]
+    positional_x_step = [18, 22, 20, 20, 22, 18.5]
+
+    positional_y_range = [0, 18, 30, 50, 62]
+    positional_y_step = [18, 12, 20, 12, 18.5]
+
+    count = 0
+    zone_list = []
+    for n, x in enumerate(positional_x_range):
+        for n_2, y in enumerate(positional_y_range):
+            x_start = x
+            x_step = positional_x_step[n]
+            x_end = x + x_step
+
+            y_start = y
+            y_step = positional_y_step[n_2]
+            y_end = y_start + y_step
+
+            count += 1
+
+            zone_dict = {"x_start": x_start, "x_end": x_end, "y_start": y_start, "y_end": y_end, "zone_name": count}
+            zone_list.append(zone_dict)
+
+    start_zone = []
+    end_zone = []
+    for z in zone_list:
+        zone_start_x = z["x_start"]
+        zone_end_x = z["x_end"]
+
+        zone_start_y = z["y_start"]
+        zone_end_y = z["y_end"]
+
+        name = z["zone_name"]
+
+        if (zone_start_x <= event_start_x < zone_end_x
+                and zone_start_y <= event_start_y < zone_end_y):
+            start_zone.append(name)
+
+        if (zone_start_x <= event_end_x < zone_end_x
+                and zone_start_y <= event_end_y < zone_end_y):
+            end_zone.append(name)
+
+    return start_zone[0], end_zone[0]

@@ -142,15 +142,18 @@ def create_player_radar(player_id, profile, position_group, min_minutes):
             v_position = "bottom"
 
         if metric_name in profile_metrics:
-            col = "indianred"
+            col = "orange"
+            pe_col = "black"
         else:
             col = "black"
+            pe_col = "#FEFAF1"
+
         ax.text(angle, 1.04, metric_rename.upper(),
                 ha='center', va=v_position,
                 rotation=rotation_angle, rotation_mode='anchor', fontsize=16, color=col,
                 family='avenir next condensed',
                 zorder=8,
-                path_effects=[path_effects.Stroke(linewidth=2, foreground="#FEFAF1", alpha=1),
+                path_effects=[path_effects.Stroke(linewidth=2, foreground=pe_col, alpha=1),
                               path_effects.Normal()])
 
         ax.text(angle, player_percentile, f"{player_value}",
@@ -161,9 +164,10 @@ def create_player_radar(player_id, profile, position_group, min_minutes):
                 bbox=dict(facecolor="#FEFAF1", alpha=1, boxstyle='round,pad=0.2'))
 
     fig.text(x=0.5, y=0, s=f"Metrics in the {profile.replace('_', ' ')} Profile".upper(), ha="center", va="center",
-             family="avenir next condensed", color="indianred",
-             fontsize=18,
-             path_effects=[path_effects.Stroke(linewidth=.5, foreground="black", alpha=1),
+             family="avenir next condensed", color="orange",
+             fontsize=22,
+             bbox=dict(facecolor="#fefaf1", alpha=.5, boxstyle='round,pad=0.2'),
+             path_effects=[path_effects.Stroke(linewidth=2, foreground="black", alpha=1),
                            path_effects.Normal()])
 
     fig.set_facecolor("none")

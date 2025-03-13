@@ -1,17 +1,17 @@
 profile_metrics_dict = {
     "box_to_box": {
         "tackles_and_interceptions_per_90":
-            {"weight": .5, "rename": "Tackles &\nInterceptions"},
+            {"weight": 1, "rename": "Tackles &\nInterceptions"},
         "ball_recoveries_per_90":
-            {"weight": .5, "rename": "Ball\nRecoveries"},
+            {"weight": 1, "rename": "Ball\nRecoveries"},
         "progressive_carries_from_own_half_per_90":
-            {"weight": .5, "rename": "Prog Carries\nOwn Half"},
+            {"weight": 1, "rename": "Prog Carries\nOwn Half"},
         "passes_made_in_final_third_per_90":
-            {"weight": .5, "rename": "Final Third\nPasses"},
+            {"weight": 1, "rename": "Final Third\nPasses"},
         "total_np_xg_per_90":
-            {"weight": .5, "rename": "Expected\nGoals"},
+            {"weight": 1, "rename": "Expected\nGoals"},
         "open_play_xga_per_90":
-            {"weight": .5, "rename": "Expected\nAssists"}}}
+            {"weight": 1, "rename": "Expected\nAssists"}}}
 
 position_metrics_dict = {
     "Central / Defensive Midfielder": {

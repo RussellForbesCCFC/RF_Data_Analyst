@@ -391,7 +391,7 @@ def player_touch_maps(focus_player_id, filtered_general_position):
 
         # FIGURE TEXT AND SAVE
 
-        fig.text(x=.5125, y=.65, s=f"Touch Maps".upper(),
+        fig.text(x=.5125, y=.65, s=f"Match by Match Touch Maps".upper(),
                  color=title_text_color,
                  family="avenir next condensed",
                  fontsize=26, ha="center", va="center")

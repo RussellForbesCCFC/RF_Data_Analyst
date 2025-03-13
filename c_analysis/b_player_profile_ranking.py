@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import requests
+import matplotlib
 from PIL import Image
 from io import BytesIO
 from matplotlib.offsetbox import (OffsetImage, AnnotationBbox)
@@ -55,8 +56,8 @@ def scale_weighted_average(row, df):
 
 
 def calculate_profile_ranks(profile, position_group, min_minutes):
-    positive_cmap_list = ["#FEFAF1", "#9cb7d8", "#1974b1"]
-    positive_cmap = LinearSegmentedColormap.from_list("", positive_cmap_list)
+    cmap_list = ["#FEFAF1", "#9cb7d8", "#1974b1"]
+    cmap = LinearSegmentedColormap.from_list("", cmap_list)
 
     data_df = pd.read_csv(
         "/Users/russellforbes/PycharmProjects/RF_Data_Analyst/a_data/b_aggregated_data/player_aggregated_data.csv")
@@ -76,7 +77,7 @@ def calculate_profile_ranks(profile, position_group, min_minutes):
     # metric_z_score_names_scaled = []
     # metric_percentile_names = []
     for met in position_group_metrics_as_list:
-        # data_df[f"{met}_percentile"] = data_df[met].rank(pct=True, ascending=True)
+        data_df[f"{met}_percentile"] = data_df[met].rank(pct=True, ascending=True)
         data_df[f"{met}_z_score_weighted"] = data_df.apply(
             lambda _row: add_player_z_score(_row, met, data_df, metric_weightings), axis=1)
 
@@ -87,19 +88,34 @@ def calculate_profile_ranks(profile, position_group, min_minutes):
     data_df["z_score_weighted_average"] = data_df[metric_z_score_names_weighted].mean(axis=1)
     data_df["z_score_weighted_average_scaled"] = data_df.apply(lambda row_: scale_weighted_average(row_, data_df),
                                                                axis=1)
-
+    # print(data_df.to_string())
+    # print(data_df[
+    #           (data_df["tackles_and_interceptions_per_90_percentile"] >= .5)
+    #           & (data_df["ball_recoveries_per_90_percentile"] >= .5)
+    #           & (data_df["progressive_carries_from_own_half_per_90_percentile"] >= .5)
+    #           & (data_df["passes_made_in_final_third_per_90_percentile"] >= .5)
+    #           & (data_df["total_np_xg_per_90_percentile"] >= .5)
+    #           & (data_df["open_play_xga_per_90_percentile"] >= .5)].to_string())
     # average z score
     ranked_players = data_df.sort_values("z_score_weighted_average", ascending=False).head(10)
 
     # create table of players
     fig = plt.figure(figsize=(16, 16), dpi=100)
     ax = fig.add_subplot()
+    ax.set_facecolor("none")
 
     metric_count = len(metric_z_score_names_weighted)
     x_lim = metric_count + 3.6
 
     ax.set_xlim(-0.1, x_lim)
     ax.set_ylim(-0.1, 11.1)
+
+    ax.fill_between([ax.get_xlim()[0] + .1, ax.get_xlim()[1] - .1],
+                    ax.get_ylim()[0] + .1,
+                    ax.get_ylim()[1] - .1,
+                    linewidth=0,
+                    color="#fefaf1",
+                    alpha=1, zorder=1)
 
     ax.yaxis.set_ticks([])
     ax.xaxis.set_ticks([])
@@ -232,7 +248,14 @@ def calculate_profile_ranks(profile, position_group, min_minutes):
                 value_max = data_df[met_name].max()
                 value_min = data_df[met_name].min()
                 value_as_per_in_range = (row_data_value - value_min) / (value_max - value_min)
-                color = positive_cmap(value_as_per_in_range)
+
+                if met_name == "z_score_weighted_average_scaled":
+                    ranking_cmap = matplotlib.colormaps["Oranges"]
+
+                else:
+                    ranking_cmap = cmap
+
+                color = ranking_cmap(value_as_per_in_range)
 
                 ax.fill_between([data_x_start - .5, data_x_start + .5],
                                 data_start_y_location - 0.5,
@@ -256,6 +279,7 @@ def calculate_profile_ranks(profile, position_group, min_minutes):
              family="avenir",
              fontsize=14, ha="center", va="center")
 
+    fig.set_facecolor("none")
     plt.savefig(
         f"/Users/russellforbes/PycharmProjects/RF_Data_Analyst/c_analysis/a_data_visualisations/top_ranked_players.png",
         dpi=300,

@@ -36,6 +36,8 @@ def create_player_passing_sonar(focus_player_id):
 
     player_events_df = pd.concat([euro_events_df, copa_events_df], ignore_index=True)
 
+    # print(player_events_df[player_events_df["team"] == "Spain"][["player_id", "player"]].value_counts().to_string())
+
     # print(player_events_df[player_events_df["team"] == "Spain"][["player", "player_id"]].value_counts().to_string())
     focus_player_open_play_pass_events_df = player_events_df[
         (player_events_df["player_id"] == focus_player_id)
@@ -50,8 +52,6 @@ def create_player_passing_sonar(focus_player_id):
     focus_player_name = focus_player_open_play_pass_events_df["player"].iloc[0]
     focus_player_open_play_pass_counts = focus_player_open_play_pass_events_df.shape[0]
 
-    print(focus_player_open_play_pass_events_df.head().to_string())
-
     # player passing sonar
     fig = plt.figure(figsize=(14, 15), dpi=150)
     ax_gs = gridspec.GridSpec(2, 1, height_ratios=[.95, .05], hspace=0.1)
@@ -63,10 +63,10 @@ def create_player_passing_sonar(focus_player_id):
     ax.set_theta_direction(-1)
     ax.spines['polar'].set_edgecolor('none')
 
-    # ax.set_yticks([])
-    # ax.set_xticks([])
-    # ax.set_yticklabels([])
-    # ax.set_xticklabels([])
+    ax.set_yticks([])
+    ax.set_xticks([])
+    ax.set_yticklabels([])
+    ax.set_xticklabels([])
 
     ax.set_ylim(-0.05, 1.1)
 
@@ -91,21 +91,8 @@ def create_player_passing_sonar(focus_player_id):
     ax.plot([np.pi / 2, np.pi / 2], [0, 1], color="black")
     ax.plot([-(np.pi / 2), -(np.pi / 2)], [0, 1], color="black")
 
-    # # annotate backwards and forwards text
-    ax.text(x=np.pi, y=.9, s="Forwards ->".upper(),
-            ha="center", va="center", family="avenir next condensed",
-            fontsize=20, rotation=90,
-            path_effects=[path_effects.Stroke(linewidth=5, foreground="#FEFAF1", alpha=1),
-                          path_effects.Normal()])
-
-    ax.text(x=0, y=.9, s="Backwards ->".upper(),
-            ha="center", va="center", family="avenir next condensed",
-            fontsize=20, rotation=270,
-            path_effects=[path_effects.Stroke(linewidth=5, foreground="#FEFAF1", alpha=1),
-                          path_effects.Normal()])
-
     # return a list of each pass angle - starting at directly backwards
-    number_of_angles = 20
+    number_of_angles = 21
     pass_angles_list = np.linspace(-np.pi, np.pi, number_of_angles)
 
     # angle I want to increase by each step
@@ -180,13 +167,13 @@ def create_player_passing_sonar(focus_player_id):
                 rotation_angle -= 0
                 v_position = "bottom"
 
-            ax.bar(x=angle_r, height=pass_length_in_range, width=width,
+            ax.bar(x=angle_r + (width / 2), height=pass_length_in_range, width=width,
                    edgecolor='black', linewidth=1.5,
                    zorder=3, alpha=1, color=bar_color)
 
             if median_pass_length == max_length:
                 pass_distance = f"{round(median_pass_length * 0.9144, 1)}m"
-                ax.text(angle_r, 1.1, f"{pass_distance}",
+                ax.text(angle_r + (width / 2), 1.1, f"{pass_distance}",
                         ha='center', va=v_position,
                         rotation=rotation_angle, rotation_mode='anchor',
                         fontsize=20, color="black",
@@ -195,11 +182,26 @@ def create_player_passing_sonar(focus_player_id):
                         path_effects=[path_effects.Stroke(linewidth=2, foreground="#FEFAF1", alpha=1),
                                       path_effects.Normal()])
 
-    # annotate %s for pass directions
-    pass_angle_dict = {"Forwards": [135, 225],
-                       "Right": [225, 315],
-                       }
-    forwards_angle_range = [(-np.pi / 6), (np.pi / 6)]
+    # workings for forwards pass %
+    # forwards pass range = -0.77 to +0.77
+    ax.bar(x=3.14, height=.1, bottom=.95, width=1.54,
+           edgecolor='black', linewidth=1.5,
+           zorder=1, alpha=1, color="lightgrey")
+
+    player_passes_forwards = focus_player_open_play_pass_events_df[
+        (focus_player_open_play_pass_events_df['pass_angle'] >= -0.77)
+        & (focus_player_open_play_pass_events_df['pass_angle'] <= .77)].shape[0]
+
+    percentage_passes = round(
+        (player_passes_forwards /
+         focus_player_open_play_pass_events_df.shape[0]) * 100, 0)
+
+    # # annotate backwards and forwards text
+    ax.text(x=np.pi, y=1, s=f"Forwards: {int(percentage_passes)}%".upper(),
+            ha="center", va="center", family="avenir next condensed",
+            fontsize=22, rotation=0,
+            path_effects=[path_effects.Stroke(linewidth=5, foreground="#FEFAF1", alpha=1),
+                          path_effects.Normal()])
 
     # COLOR BAR -------------------------------------------------------------------------------------------------------
     cbar_ax = fig.add_subplot(ax_cbar[4])
@@ -240,4 +242,5 @@ def create_player_passing_sonar(focus_player_id):
 
     plt.close()
 
-# create_player_passing_sonar(6655)
+
+create_player_passing_sonar(6655)

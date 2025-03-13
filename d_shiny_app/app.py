@@ -24,12 +24,12 @@ wider_position_list = ["Goalkeeper", "Left Back", "Right Back", "Center Back",
 
 profile_dictionaries = {
     "Box to Box Midfielder": [
-        {"name": "tackles_and_interceptions_per_90", "weight": .6},
-        {"name": "ball_recoveries_per_90", "weight": .4},
-        {"name": "progressive_carries_from_own_half_per_90", "weight": .5},
-        {"name": "passes_made_in_final_third_per_90", "weight": .5},
-        {"name": "total_np_xg_per_90", "weight": .5},
-        {"name": "open_play_xga_per_90", "weight": .5}]}
+        {"name": "tackles_and_interceptions_per_90", "weight": 1},
+        {"name": "ball_recoveries_per_90", "weight": 1},
+        {"name": "progressive_carries_from_own_half_per_90", "weight": 1},
+        {"name": "passes_made_in_final_third_per_90", "weight": 1},
+        {"name": "total_np_xg_per_90", "weight": 1},
+        {"name": "open_play_xga_per_90", "weight": 1}]}
 
 profile_list = [i for i in profile_dictionaries.keys()]
 profile_list.insert(0, "None")

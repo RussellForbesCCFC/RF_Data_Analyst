@@ -215,12 +215,14 @@ def create_player_data_by_position():
         "carry_distance_from_own_half")
 
     progressive_carries = player_carry_events[
-        (player_carry_events["action_distance_towards_goal_as_per"] >= 10)].groupby(
+        (player_carry_events["action_distance_towards_goal_as_per"] >= 10)
+        & (player_carry_events["action_distance_towards_goal"] >= 5)].groupby(
         metric_group_by_list)[
         "id"].count().rename("progressive_carries")
 
     progressive_carries_from_own_half = player_carry_events[
         (player_carry_events["action_distance_towards_goal_as_per"] >= 10)
+        & (player_carry_events["action_distance_towards_goal"] >= 5)
         & (player_carry_events["location_x"] <= 60)].groupby(
         metric_group_by_list)[
         "id"].count().rename("progressive_carries_from_own_half")
@@ -285,12 +287,16 @@ def create_player_data_by_position():
 
     progressive_passes = player_pass_events[
         (player_pass_events["action_distance_towards_goal_as_per"] >= 10)
+        & (player_pass_events["action_distance_towards_goal"] >= 5)
+        & (player_pass_events["pass_outcome"].isnull())
         & ~(player_pass_events["pass_type"].isin(["Corner", "Free Kick", "Kick Off", "Throw-in"]))].groupby(
         metric_group_by_list)[
         "id"].count().rename("progressive_passes")
 
     progressive_passes_from_own_half = player_pass_events[
         (player_pass_events["action_distance_towards_goal_as_per"] >= 10)
+        & (player_pass_events["action_distance_towards_goal"] >= 5)
+        & (player_pass_events["pass_outcome"].isnull())
         & ~(player_pass_events["pass_type"].isin(["Corner", "Free Kick", "Kick Off", "Throw-in"]))
         & (player_pass_events["location_x"] <= 60)].groupby(
         metric_group_by_list)[
