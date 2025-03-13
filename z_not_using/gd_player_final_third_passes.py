@@ -16,12 +16,12 @@ def player_final_third_passes(focus_player_id):
     positive_cmap = LinearSegmentedColormap.from_list("", positive_cmap_list)
     # read and combine raw data
     euro_events_df = pd.read_csv(
-        "/Users/russellforbes/PycharmProjects/RF_Data_Analyst/a_data/a_raw_data/euro_2024_task_data.csv",
+        "/a_data/a_raw_data/euro_2024_task_data.csv",
         low_memory=False)
     euro_events_df["competition_name"] = "Euro 2024"
 
     copa_events_df = pd.read_csv(
-        "/Users/russellforbes/PycharmProjects/RF_Data_Analyst/a_data/a_raw_data/copa_2024_task_data.csv",
+        "/a_data/a_raw_data/copa_2024_task_data.csv",
         low_memory=False)
     copa_events_df["competition_name"] = "Copa 2024"
 
