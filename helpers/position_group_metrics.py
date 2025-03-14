@@ -31,7 +31,7 @@ position_metrics_dict = {
         "ball_retention_under_pressure":
             {"rename": "Ball Retention\nUnder Pressure %"},
         # carrying
-        "total_dribble_carry_obv":
+        "total_dribble_carry_obv_per_90":
             {"rename": "Carry OBV"},
         "progressive_carries_from_own_half_per_90":
             {"rename": "Progressive Carries\nOwn Half"},

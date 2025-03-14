@@ -59,6 +59,10 @@ def create_player_per_90_data():
             (player_aggregated_df["ball_lost_under_pressure"] +
              player_aggregated_df["ball_retained_under_pressure"]))
 
+    player_aggregated_df["open_play_forward_pass_percentage"] = (
+            player_aggregated_df["open_play_forward_passes"] /
+            player_aggregated_df["open_play_total_passes"])
+
     player_aggregated_df.to_csv(
         "/Users/russellforbes/PycharmProjects/RF_Data_Analyst/a_data/b_aggregated_data/player_aggregated_data.csv")
 
@@ -66,12 +70,6 @@ def create_player_per_90_data():
         "/Users/russellforbes/PycharmProjects/RF_Data_Analyst/d_shiny_app/player_aggregated_data.csv")
 
     print(player_aggregated_df.head().to_string())
-    player_aggregated_df.to_clipboard()
-    # print(player_aggregated_df[
-    #           (player_aggregated_df["position_group"] == "Central / Defensive Midfielder")].sort_values(
-    #     "progressive_carries_from_own_half_per_90", ascending=False)[
-    #           ["player", "team", "total_time_minutes", "progressive_carries_from_own_half_per_90"]].to_string())
-    #
 
 
 create_player_per_90_data()

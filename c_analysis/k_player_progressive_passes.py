@@ -108,21 +108,21 @@ def player_progressive_passes(focus_player_id):
     fig = plt.figure(figsize=(20, 12), dpi=100)
     title_text_color = "black"
 
-    zone_loop_dict = {"start_zone": "Start Locations",
-                      "end_zone": "End Locations"}
-    zone_loop_list = [i for i in zone_loop_dict.keys()]
-
     ax = fig.add_subplot()
 
     pitch = VerticalPitch(pitch_type="statsbomb",
                           pitch_color='none',
                           half=False, line_zorder=2, corner_arcs=True,
                           linewidth=1, line_alpha=1, line_color='black',
-                          pad_left=0, pad_right=0, pad_bottom=0, pad_top=0)
+                          pad_left=4, pad_right=4, pad_bottom=4, pad_top=4)
 
     pitch.draw(ax=ax)
 
-    ax.set_facecolor("#FEFAF1")
+    ax.fill_between([0, 80],
+                    0, 120,
+                    linewidth=0,
+                    color="#fefaf1",
+                    alpha=1, zorder=1)
 
     x_plot_points = [18, 30, 50, 62]
     y_plot_points = [18, 40, 60, 80, 102]
@@ -131,6 +131,14 @@ def player_progressive_passes(focus_player_id):
 
     for x in x_plot_points:
         ax.plot([x, x], [0.1, 120], color='black', linewidth=.5, zorder=2, alpha=0.5, ls="--")
+
+    ax.annotate(xy=(-2, 90), xytext=(-2, 30), text='', color=title_text_color, size=16,
+                xycoords='data',
+                arrowprops=dict(arrowstyle='-|>', color=title_text_color))
+
+    ax.annotate(xy=(-2.5, 60), xytext=(-2.5, 60), text='Direction of Attack'.upper(),
+                va='center', ha="right", color=title_text_color, size=14,
+                xycoords='data', family='avenir', rotation=90)
 
     zone = "end_zone"
     zone_reference_counts = progressive_passes[zone].value_counts().reset_index()
@@ -170,15 +178,15 @@ def player_progressive_passes(focus_player_id):
     pitch.arrows(progressive_passes["location_x"], progressive_passes["location_y"],
                  progressive_passes["end_location_x"], progressive_passes["end_location_y"],
                  color="powderblue", ec='black', linewidth=.5,
-                 ax=ax, width=2, headwidth=4.5, headlength=4.5, alpha=.25, zorder=2)
+                 ax=ax, width=2, headwidth=4.5, headlength=4.5, alpha=.5, zorder=2)
 
     # FIGURE
-    fig.text(x=.5125, y=.955, s=f"Progressive Passes - Where To".upper(),
+    fig.text(x=.5125, y=.94, s=f"Progressive Passes - Where To".upper(),
              color=title_text_color,
              family="avenir next condensed",
              fontsize=32, ha="center", va="center")
 
-    fig.text(x=.5125, y=.915,
+    fig.text(x=.5125, y=.895,
              s=f"Pitch Shows the end locations of progressive passes made by {focus_player_name}\n"
                f"progressive passes are completed passes that travel at least 5m\n"
                f"and 10% of the remaining distance towards goal".upper(),

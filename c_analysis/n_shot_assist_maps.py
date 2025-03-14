@@ -66,8 +66,8 @@ def player_shot_assist_maps(focus_player_id):
 
     count_of_chances = focus_player_open_play_shot_assists.shape[0]
     xg_of_chances = focus_player_open_play_shot_assists["assisted_shot_statsbomb_xg"].sum()
-
-    print(focus_player_open_play_shot_assists.head().to_string())
+    player_assists = focus_player_open_play_shot_assists[
+        (focus_player_open_play_shot_assists["pass_goal_assist"] == True)].shape[0]
 
     fig = plt.figure(figsize=(12, 5), dpi=100)
     ax = fig.add_subplot()
@@ -92,10 +92,12 @@ def player_shot_assist_maps(focus_player_id):
     positive_cmap_list = ["#FEFAF1", "#95b0d1", "#1974b1"]
     positive_cmap = LinearSegmentedColormap.from_list("", positive_cmap_list)
 
-    player_stats_text = f"CHANCES CREATED: <{int(count_of_chances)}> | xG CREATED: <{round(xg_of_chances, 2)}>"
+    player_stats_text = f"CHANCES CREATED: <{int(count_of_chances)}> | xG CREATED: <{round(xg_of_chances, 2)}> | ASSISTS: <{int(player_assists)}>"
     ax_text(x=40, y=122, s=player_stats_text, ha="center", va="center",
             family="avenir", fontsize=13,
-            highlight_textprops=[{"family": "avenir next condensed"}, {"family": "avenir next condensed"}, ])
+            highlight_textprops=[{"family": "avenir next condensed"},
+                                 {"family": "avenir next condensed"},
+                                 {"family": "avenir next condensed"}, ])
 
     # CREATING DF OF ZONE REFERENCES -----------------------------------------------------------------------------------
     positional_y_range = [0, 18, 30, 50, 62]

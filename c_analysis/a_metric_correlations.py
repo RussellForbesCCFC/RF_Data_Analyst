@@ -35,8 +35,6 @@ def metric_correlation_check(profile, position_group):
 
     data_df = data_df[(data_df["total_time_minutes"] >= 300) & (data_df["position_group"] == position_group)]
 
-    print(data_df.shape[0])
-
     position_group_metrics_as_list = [i for i in profile_metrics_dict[profile].keys()]
 
     # correlation check

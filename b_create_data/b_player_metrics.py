@@ -289,7 +289,8 @@ def create_player_data_by_position():
         (player_pass_events["action_distance_towards_goal_as_per"] >= 10)
         & (player_pass_events["action_distance_towards_goal"] >= 5)
         & (player_pass_events["pass_outcome"].isnull())
-        & ~(player_pass_events["pass_type"].isin(["Corner", "Free Kick", "Kick Off", "Throw-in"]))].groupby(
+        & ~(player_pass_events["pass_type"].isin(
+            ["Corner", "Free Kick", "Kick Off", "Goal Kick", "Throw-in"]))].groupby(
         metric_group_by_list)[
         "id"].count().rename("progressive_passes")
 
@@ -297,7 +298,7 @@ def create_player_data_by_position():
         (player_pass_events["action_distance_towards_goal_as_per"] >= 10)
         & (player_pass_events["action_distance_towards_goal"] >= 5)
         & (player_pass_events["pass_outcome"].isnull())
-        & ~(player_pass_events["pass_type"].isin(["Corner", "Free Kick", "Kick Off", "Throw-in"]))
+        & ~(player_pass_events["pass_type"].isin(["Corner", "Free Kick", "Kick Off", "Goal Kick", "Throw-in"]))
         & (player_pass_events["location_x"] <= 60)].groupby(
         metric_group_by_list)[
         "id"].count().rename("progressive_passes_from_own_half")
@@ -346,6 +347,14 @@ def create_player_data_by_position():
         "id"].count().rename(
         "completed_passes_under_pressure")
 
+    open_play_forward_passes = player_pass_events[
+        (player_pass_events['pass_angle'] >= -0.77)
+        & (player_pass_events['pass_angle'] <= .77)
+        & (player_pass_events["pass_outcome"] != "Pass Offside")
+        & ~(player_pass_events["pass_type"].isin(
+            ["Corner", "Free Kick", "Kick Off", "Goal Kick", "Throw-in"]))].groupby(
+        metric_group_by_list)["id"].count().rename("open_play_forward_passes")
+
     player_touches = player_events_df[
         (((player_events_df["type"] == "Pass") & (
                 (player_events_df["pass_outcome"].isnull())
@@ -374,6 +383,10 @@ def create_player_data_by_position():
         metric_group_by_list)[
         "id"].count().rename("touches_in_final_third")
 
+    player_touches_all_pitch = player_touches.groupby(
+        metric_group_by_list)[
+        "id"].count().rename("all_touches")
+
     # XG CREATED BY POSITION PLAYED -----------------------------------------------------------------------------------
     # to get xg of key passes - create separate df of shots and their ID
     event_shots_df = player_events_df[
@@ -393,12 +406,13 @@ def create_player_data_by_position():
         metric_group_by_list)["assisted_shot_statsbomb_xg"].sum().rename("xga")
 
     op_xg_assisted = player_key_pass_events_df[
-        ~(player_key_pass_events_df["pass_type"].isin(["Corner", "Free Kick", "Kick Off", "Throw-in"]))].groupby(
+        ~(player_key_pass_events_df["pass_type"].isin(
+            ["Corner", "Free Kick", "Kick Off", "Goal Kick", "Throw-in"]))].groupby(
         metric_group_by_list)["assisted_shot_statsbomb_xg"].sum().rename("open_play_xga")
 
     sp_xg_assisted = player_key_pass_events_df[
         (player_key_pass_events_df["pass_type"].isin(
-            ["Corner", "Free Kick", "Kick Off", "Throw-in"]))].groupby(
+            ["Corner", "Free Kick", "Kick Off", "Goal Kick", "Throw-in"]))].groupby(
         metric_group_by_list)["assisted_shot_statsbomb_xg"].sum().rename("set_piece_xga")
 
     total_goal_assists = player_events_df[
@@ -611,7 +625,8 @@ def create_player_data_by_position():
          final_third_pass_obv, opp_half_pass_obv, pass_attempted_crosses,
          pass_completed_crosses,
          progressive_passes, progressive_passes_from_own_half,
-         total_passes_under_pressure, completed_passes_under_pressure,
+         total_passes_under_pressure, completed_passes_under_pressure, open_play_forward_passes,
+         player_touches_all_pitch,
          player_touches_inside_box, player_touches_in_final_third,
          all_xg_assisted, op_xg_assisted, sp_xg_assisted,
          total_goal_assists, open_play_goal_assists, pass_obv,
@@ -633,12 +648,8 @@ def create_player_data_by_position():
     competition_player_stats_df["tackles_and_interceptions_in_defensive_third"] = competition_player_stats_df[
         ["tackles_in_defensive_third", "interceptions_in_defensive_third"]].sum(axis=1)
 
-    print(competition_player_stats_df.head(20).to_string())
-
     competition_player_stats_df.to_csv(
         "/Users/russellforbes/PycharmProjects/RF_Data_Analyst/a_data/b_aggregated_data/player_metric_totals.csv")
-
-    # print(competition_player_stats_df.head(10).to_string())
 
 
 create_player_data_by_position()

@@ -1,14 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from mplsoccer import VerticalPitch
-import seaborn as sns
-from highlight_text import ax_text
-import matplotlib.patheffects as path_effects
-from PIL import Image
-from io import BytesIO
-from matplotlib.offsetbox import (OffsetImage, AnnotationBbox)
-from matplotlib.colors import LinearSegmentedColormap
 
 
 def player_minutes_per_team_as_bar(focus_player_id):
@@ -288,7 +280,6 @@ def player_minutes_per_team_as_bar(focus_player_id):
             team_player_minute_totals["total_time_minutes"] /
             team_player_minute_totals["team_available_minutes"])
 
-    print(team_player_minute_totals.to_string())
     # create bar graph
     fig = plt.figure(figsize=(26, 10), dpi=100)
     ax = fig.add_subplot()

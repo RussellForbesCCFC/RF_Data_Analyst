@@ -155,3 +155,31 @@ def assign_zone_to_pass_carry_shot_thirds(row):
             end_zone.append(name)
 
     return start_zone[0], end_zone[0]
+
+
+def add_position_to_pass_receiver(row, df):
+    pass_receiver_id = row["pass_recipient_id"]
+    pass_receiver_name = row["pass_recipient"]
+    pass_index = row["index"]
+    pass_match_id = row["match_id"]
+
+    receiver_events_after_index = df[
+        (df["index"] >= pass_index)
+        & (df["player_id"] == pass_receiver_id)
+        & (df["match_id"] == pass_match_id)]
+
+    receiver_events_before_index = df[
+        (df["index"] < pass_index)
+        & (df["player_id"] == pass_receiver_id)
+        & (df["match_id"] == pass_match_id)]
+
+    count_of_receiver_events_post = receiver_events_after_index.shape[0]
+    count_of_receiver_events_pre = receiver_events_before_index.shape[0]
+    if count_of_receiver_events_post > 0:
+        player_first_position = receiver_events_after_index["position"].iloc[0]
+    elif count_of_receiver_events_pre > 0:
+        player_first_position = receiver_events_before_index["position"].tail(1).iloc[0]
+    else:
+        player_first_position = None
+
+    return player_first_position

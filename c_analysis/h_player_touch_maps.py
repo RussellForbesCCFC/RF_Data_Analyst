@@ -1,17 +1,15 @@
+import matplotlib
+import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from mplsoccer import VerticalPitch
-import seaborn as sns
 from highlight_text import ax_text
-import matplotlib.patheffects as path_effects
-from PIL import Image
-from io import BytesIO
-from matplotlib.offsetbox import (OffsetImage, AnnotationBbox)
-from matplotlib.colors import LinearSegmentedColormap
+from matplotlib import gridspec
+from matplotlib.colors import Normalize
+from mplsoccer import VerticalPitch
 
 from helpers.helper_dictionaries import position_groups
-from helpers.helper_functions import get_start_locations, get_pass_end_locations
+from helpers.helper_functions import get_start_locations
 
 
 def player_touch_maps(focus_player_id, filtered_general_position):
@@ -264,26 +262,28 @@ def player_touch_maps(focus_player_id, filtered_general_position):
     # CREATE FIGURE
     number_of_matches = len(player_matches_played_in)
 
-    fig = plt.figure(figsize=(22, 18), dpi=100)
+    fig = plt.figure(figsize=(22, 5.5), dpi=100)
+
+    ax_pitches = gridspec.GridSpec(2, number_of_matches, height_ratios=[.95, .05])
+    ax_cbar = gridspec.GridSpec(2, 3, height_ratios=[.95, .05], width_ratios=[0.4, 0.3, 0.4], hspace=-0.3)
     title_text_color = "black"
 
-    if number_of_matches == 7:
-        subplot_arrange = [2, 4]
-    else:
-        subplot_arrange = [1, 6]
-
     for n, match_id_reference in enumerate(player_matches_played_in):
-        ax = fig.add_subplot(subplot_arrange[0], subplot_arrange[1], n + 1)
+        ax = fig.add_subplot(ax_pitches[n])
 
         pitch = VerticalPitch(pitch_type="statsbomb",
                               pitch_color='none',
                               half=False, line_zorder=2, corner_arcs=True,
                               linewidth=1, line_alpha=1, line_color='black',
-                              pad_left=0, pad_right=0, pad_bottom=0, pad_top=0)
+                              pad_left=4, pad_right=4, pad_bottom=4, pad_top=4)
 
         pitch.draw(ax=ax)
 
-        ax.set_facecolor("#FEFAF1")
+        ax.fill_between([0, 80],
+                        0, 120,
+                        linewidth=0,
+                        color="#fefaf1",
+                        alpha=1, zorder=1)
 
         x_plot_points = [18, 30, 50, 62]
         y_plot_points = [18, 40, 60, 80, 102]
@@ -389,21 +389,44 @@ def player_touch_maps(focus_player_id, filtered_general_position):
                       fill=False, levels=1, thresh=0.1,
                       cut=4, color="black", zorder=2, bw_adjust=.85)
 
-        # FIGURE TEXT AND SAVE
+    # COLOR BAR -------------------------------------------------------------------------------------------------------
+    cbar_ax = fig.add_subplot(ax_cbar[4])
 
-        fig.text(x=.5125, y=.65, s=f"Match by Match Touch Maps".upper(),
-                 color=title_text_color,
-                 family="avenir next condensed",
-                 fontsize=26, ha="center", va="center")
+    cbar_ax.set_ylim(0, 1)
+    cbar_ax.set_xlim(0, 1)
 
-        fig.text(x=.5125, y=.63,
-                 s=f"Circles show {focus_player_name}s average position | Number represents the amount of touches | underlying heatmaps are of all his touches\n"
-                   f"When playing {filtered_general_position} for {focus_player_team} in {focus_player_competition}".upper(),
-                 color=title_text_color,
-                 family="avenir",
-                 fontsize=10, ha="center", va="center")
+    cmap = matplotlib.colormaps["cool"]
+    norm = Normalize(vmin=0, vmax=1)
+    fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), cax=cbar_ax,
+                 orientation="horizontal", location="bottom", shrink=0.8)
 
-    # fig.set_facecolor("#FEFAF1")
+    cbar_ax.set_yticks([])
+    cbar_ax.set_xticks([])
+    cbar_ax.set_yticklabels([])
+    cbar_ax.set_xticklabels([])
+
+    cbar_ax.annotate(xy=(0, 0.5), xytext=(-0.01, 0.5), text=f"Lower Volume of Touches".upper(),
+                     color='black', size=10, family="avenir",
+                     xycoords='data', ha="right", va="center")
+
+    cbar_ax.annotate(xy=(1, 0.5), xytext=(1.01, 0.5), text=f"Higher Volume of Touches".upper(),
+                     color='black', size=10, family="avenir",
+                     xycoords='data', ha="left", va="center")
+
+    # FIGURE TEXT AND SAVE
+
+    fig.text(x=.5125, y=1.02, s=f"{focus_player_name} Touch Maps".upper(),
+             color=title_text_color,
+             family="avenir next condensed",
+             fontsize=26, ha="center", va="center")
+
+    fig.text(x=.5125, y=.96,
+             s=f"Circles show {focus_player_name}s average position | Number represents the amount of touches | underlying heatmaps are of all his touches\n"
+               f"When playing {filtered_general_position} for {focus_player_team} in {focus_player_competition}".upper(),
+             color=title_text_color,
+             family="avenir",
+             fontsize=10, ha="center", va="center")
+
     fig.set_facecolor("none")
     plt.savefig(
 
@@ -417,9 +440,3 @@ def player_touch_maps(focus_player_id, filtered_general_position):
 
 
 player_touch_maps(6655, "Central / Defensive Midfielder")
-
-# fabian ruiz = 6655
-# declan rice =3943
-# vitinia =34639
-# kroos = 5574
-# valverde = 6773

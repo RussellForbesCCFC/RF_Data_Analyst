@@ -474,16 +474,11 @@ def player_minutes_by_match_and_position(focus_player_id):
     ax.plot([x_start - 0.5, x_start - 0.5],
             [ax.get_ylim()[0] + 0.1, ax.get_ylim()[1] - 0.1], lw=1.5, color="black")
 
-    # fig.text(x=.5125, y=.98, s=f"{focus_player_name}".upper(),
-    #          color=title_text_color,
-    #          family="avenir next condensed",
-    #          fontsize=26, ha="center", va="center")
-
     fig.text(x=.5125, y=.95,
-             s=f"Minutes Played by Position and Matches".upper(),
+             s=f"{focus_player_name} Minutes Played by Position and Fixture".upper(),
              color=title_text_color,
              family="avenir next condensed",
-             fontsize=24, ha="center", va="center")
+             fontsize=22, ha="center", va="center")
 
     fig.set_facecolor("none")
     plt.savefig(

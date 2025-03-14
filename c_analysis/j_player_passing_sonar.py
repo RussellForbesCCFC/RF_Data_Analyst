@@ -36,18 +36,11 @@ def create_player_passing_sonar(focus_player_id):
 
     player_events_df = pd.concat([euro_events_df, copa_events_df], ignore_index=True)
 
-    # print(player_events_df[player_events_df["team"] == "Spain"][["player_id", "player"]].value_counts().to_string())
-
-    # print(player_events_df[player_events_df["team"] == "Spain"][["player", "player_id"]].value_counts().to_string())
     focus_player_open_play_pass_events_df = player_events_df[
         (player_events_df["player_id"] == focus_player_id)
         & (player_events_df["type"] == "Pass")
         & (player_events_df["pass_outcome"] != "Offside")
-        & ~(player_events_df["pass_type"].isin(["Corner", "Free Kick", "Throw-in", "Kick Off"]))].copy()
-
-    # focus_player_open_play_pass_events_df["pass_angle_degrees"] = (
-    #     focus_player_open_play_pass_events_df[
-    #         "pass_angle"].apply(lambda x: np.degrees(-x)))
+        & ~(player_events_df["pass_type"].isin(["Corner", "Free Kick", "Kick Off", "Throw-in", "Kick Off"]))].copy()
 
     focus_player_name = focus_player_open_play_pass_events_df["player"].iloc[0]
     focus_player_open_play_pass_counts = focus_player_open_play_pass_events_df.shape[0]
@@ -215,11 +208,14 @@ def create_player_passing_sonar(focus_player_id):
 
     cbar_ax.tick_params(labelsize=20, labelfontfamily="avenir", length=1)
 
-    # ax_low.yaxis.set_ticks([])
-    # ax_low.xaxis.set_ticks([])
+    half_x = min_count_of_passes + ((max_count_of_passes - min_count_of_passes) / 2)
+    cbar_ax.annotate(xy=(half_x, 1),
+                     xytext=(half_x, 1.05),
+                     text=f"Volume of Passes in Direction".upper(),
+                     color='black', size=18, family="avenir",
+                     xycoords='data', ha="center", va="bottom")
 
     # FIGURE TEXT
-
     fig.text(x=.5125, y=1.02, s=f"Passing Sonar".upper(),
              color=title_text_color,
              family="avenir next condensed",

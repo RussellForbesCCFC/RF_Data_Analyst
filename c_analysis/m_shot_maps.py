@@ -54,6 +54,7 @@ def player_shot_maps(focus_player_id):
 
     count_of_shots = player_np_shots.shape[0]
     xg_of_shots = player_np_shots["shot_statsbomb_xg"].sum()
+    player_goals = player_np_shots[player_np_shots["shot_outcome"] == "Goal"].shape[0]
 
     fig = plt.figure(figsize=(12, 5), dpi=100)
     ax = fig.add_subplot()
@@ -78,10 +79,12 @@ def player_shot_maps(focus_player_id):
     positive_cmap_list = ["#FEFAF1", "#95b0d1", "#1974b1"]
     positive_cmap = LinearSegmentedColormap.from_list("", positive_cmap_list)
 
-    player_stats_text = f"SHOTS: <{int(count_of_shots)}> | xG: <{round(xg_of_shots, 2)}>"
+    player_stats_text = f"SHOTS: <{int(count_of_shots)}> | xG: <{round(xg_of_shots, 2)}> | GOALS: <{int(player_goals)}>"
     ax_text(x=40, y=122, s=player_stats_text, ha="center", va="center",
             family="avenir", fontsize=13,
-            highlight_textprops=[{"family": "avenir next condensed"}, {"family": "avenir next condensed"}, ])
+            highlight_textprops=[{"family": "avenir next condensed"},
+                                 {"family": "avenir next condensed"},
+                                 {"family": "avenir next condensed"}])
 
     # CREATING DF OF ZONE REFERENCES -----------------------------------------------------------------------------------
     positional_y_range = [0, 18, 30, 50, 62]

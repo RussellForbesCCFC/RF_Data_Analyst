@@ -1,21 +1,26 @@
+import matplotlib.patheffects as path_effects
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import seaborn as sns
-from highlight_text import ax_text
-import matplotlib.patheffects as path_effects
-
 from PIL import Image
-from io import BytesIO
-from matplotlib.offsetbox import (OffsetImage, AnnotationBbox)
+from highlight_text import ax_text
 from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.offsetbox import (OffsetImage, AnnotationBbox)
 
 from helpers.position_group_metrics import position_metrics_dict, profile_metrics_dict
 
 
-def create_player_radar(player_id, profile, position_group, min_minutes):
-    positive_cmap_list = ["#FEFAF1", "#95b0d1", "#1974b1"]
-    positive_cmap = LinearSegmentedColormap.from_list("", positive_cmap_list)
+def create_player_radar(focus_player_id, profile, position_group, min_minutes):
+    """
+    a function to create a player radar based on the position group with metrics within a profile highlighted
+    :param focus_player_id:
+    :param profile:
+    :param position_group:
+    :param min_minutes:
+    :return: a matplotlib player radar
+    """
+    cmap_list = ["#FEFAF1", "#95b0d1", "#1974b1"]
+    cmap = LinearSegmentedColormap.from_list("", cmap_list)
 
     player_df = pd.read_csv(
         "/Users/russellforbes/PycharmProjects/RF_Data_Analyst/a_data/b_aggregated_data/player_aggregated_data.csv")
@@ -30,7 +35,9 @@ def create_player_radar(player_id, profile, position_group, min_minutes):
         player_df[f"{metric_}_percentile"] = player_df[metric_].rank(pct=True, ascending=True)
 
     filtered_player_row = player_df[
-        (player_df["player_id"] == player_id)]
+        (player_df["player_id"] == focus_player_id)]
+
+    print(filtered_player_row.to_string())
 
     player_name = filtered_player_row["player"].iloc[0]
     player_team = filtered_player_row["team"].iloc[0]
@@ -102,16 +109,10 @@ def create_player_radar(player_id, profile, position_group, min_minutes):
     # adding player percentiles
     for n, m in enumerate(position_group_metric_list):
         player_percentile = filtered_player_row[m + "_percentile"].iloc[0]
-        # percentile_in_z_scores = profile_dict[m]["include_in_z_scores"]
-
-        # if percentile_in_z_scores:
-        #     cmap = negative_cmap
-        # else:
-        #     cmap = positive_cmap
 
         angle_r = angles[n]
 
-        bar_color = positive_cmap(player_percentile)
+        bar_color = cmap(player_percentile)
 
         ax.bar(x=angle_r,
                height=player_percentile,

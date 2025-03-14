@@ -164,7 +164,8 @@ def calculate_profile_ranks(profile, position_group, min_minutes):
     for met_name in column_title_names:
         if met_name in position_group_metrics_as_list:
             metric_rename = profile_metrics_dict[profile][met_name]["rename"]
-            metric_weight = f"Weight: {metric_weightings[met_name]}"
+            # metric_weight = f"Weight: {metric_weightings[met_name]}"
+            metric_weight = ""
 
         else:
             metric_rename = additional_renames[met_name]
