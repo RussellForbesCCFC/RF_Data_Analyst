@@ -1,14 +1,12 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-from mplsoccer import VerticalPitch
-from highlight_text import ax_text
-from matplotlib.colors import LinearSegmentedColormap
 import matplotlib.patheffects as path_effects
+import matplotlib.pyplot as plt
+import pandas as pd
+from matplotlib.colors import LinearSegmentedColormap
+from mplsoccer import VerticalPitch
 
-from helpers.helper_dictionaries import position_groups
 from helpers.helper_functions import (get_start_locations, get_pass_end_locations,
                                       calculate_action_distance,
-                                      assign_zone_to_start_thirds, assign_zone_to_pass_carry_shot_thirds)
+                                      assign_zone_to_pass_carry_shot_thirds)
 
 
 def player_progressive_passes(focus_player_id):

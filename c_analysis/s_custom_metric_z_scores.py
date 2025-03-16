@@ -1,24 +1,14 @@
-import matplotlib.patheffects as path_effects
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-from PIL import Image
-from highlight_text import ax_text
-from matplotlib.colors import LinearSegmentedColormap
-from matplotlib.offsetbox import (OffsetImage, AnnotationBbox)
-
-from helpers.position_group_metrics import position_metrics_dict, profile_metrics_dict
 
 
-def single_metric_player_z_scores(focus_player_id, metric_name, profile, position_group, min_minutes):
+def single_metric_player_z_scores(focus_player_id, metric_name, position_group, min_minutes):
     player_df = pd.read_csv(
         "/Users/russellforbes/PycharmProjects/RF_Data_Analyst/a_data/b_aggregated_data/player_aggregated_data.csv")
 
     player_df = player_df[
         (player_df["total_time_minutes"] >= min_minutes)
         & (player_df["position_group"] == position_group)]
-
-    print(player_df.head().to_string())
 
     focus_player_name = player_df[player_df["player_id"] == focus_player_id]["player"].iloc[0]
 
@@ -101,13 +91,5 @@ def single_metric_player_z_scores(focus_player_id, metric_name, profile, positio
     plt.close()
 
 
-single_metric_player_z_scores(6655, "ball_recoveries_per_90", "box_to_box",
-                              "Central / Defensive Midfielder",
-                              300)
-
-# metrics entered
-# all_touches_per_90
-# progressive_passes_per_90
-# open play forward pass percentage
-# progressive_carries_per_90
-# progressive_carries_from_own_half_per_90
+single_metric_player_z_scores(6655, "ball_recoveries_per_90",
+                              "Central / Defensive Midfielder", 300)

@@ -1,17 +1,9 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-from mplsoccer import VerticalPitch
-from matplotlib import ticker
-from highlight_text import ax_text
-from matplotlib.colors import LinearSegmentedColormap
 import matplotlib.patheffects as path_effects
+import matplotlib.pyplot as plt
+import pandas as pd
 from adjustText import adjust_text
-from scipy.interpolate.dfitpack import percur
-
-from helpers.helper_dictionaries import position_groups
-from helpers.helper_functions import (get_start_locations, get_pass_end_locations,
-                                      calculate_action_distance,
-                                      assign_zone_to_start_thirds, assign_zone_to_pass_carry_shot_thirds)
+from highlight_text import ax_text
+from matplotlib import ticker
 
 
 def create_obv_scatter(focus_player_id, position_group, min_minutes, scatter_metric_dict):
@@ -23,8 +15,6 @@ def create_obv_scatter(focus_player_id, position_group, min_minutes, scatter_met
         & (player_df["position_group"] == position_group)].copy()
 
     focus_player_name = player_df[player_df["player_id"] == focus_player_id]["player"].iloc[0]
-
-    print(player_df.to_string())
 
     fig = plt.figure(figsize=(20, 14), dpi=100)
     ax = fig.add_subplot()
@@ -221,4 +211,5 @@ def create_obv_scatter(focus_player_id, position_group, min_minutes, scatter_met
 
 raw_scatter_metric_dict = {"pass_obv_per_90": "Pass OBV",
                            "total_dribble_carry_obv_per_90": "Carry OBV"}
+
 create_obv_scatter(6655, "Central / Defensive Midfielder", 300, raw_scatter_metric_dict)

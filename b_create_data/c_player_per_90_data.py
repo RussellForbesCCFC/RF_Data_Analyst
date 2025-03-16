@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 
 def create_player_per_90_data():
@@ -68,8 +67,6 @@ def create_player_per_90_data():
 
     player_aggregated_df.to_csv(
         "/Users/russellforbes/PycharmProjects/RF_Data_Analyst/d_shiny_app/player_aggregated_data.csv")
-
-    print(player_aggregated_df.head().to_string())
 
 
 create_player_per_90_data()

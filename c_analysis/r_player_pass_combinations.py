@@ -59,8 +59,6 @@ def player_pass_combinations(focus_player_id):
     player_all_pass_counts.reset_index(inplace=True)
     max_passes_to_or_from = player_all_pass_counts[["passes_to", "passes_from"]].max().max()
 
-    print(player_all_pass_counts.to_string())
-
     fig = plt.figure(figsize=(25, 8), dpi=100)
     ax = fig.add_subplot()
 

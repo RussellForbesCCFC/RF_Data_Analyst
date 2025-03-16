@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from datetime import timedelta
 
 from helpers.helper_dictionaries import position_groups
@@ -108,7 +107,6 @@ def create_player_data_by_position():
 
     player_events_df = pd.concat([euro_events_df, copa_events_df], ignore_index=True)
 
-    # print(player_events_df["type"].value_counts().to_string())
     # remove events where the position is substitute - all players on the bench getting cards
     # filter to only player events
     player_events_df = player_events_df[

@@ -197,5 +197,3 @@ def player_progressive_carries_map(focus_player_id):
 
 
 player_progressive_carries_map(6655)
-
-# valverde = 6773

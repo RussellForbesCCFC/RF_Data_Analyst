@@ -1,17 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from mplsoccer import VerticalPitch
-import seaborn as sns
-from highlight_text import ax_text
-import matplotlib.patheffects as path_effects
-from PIL import Image
-from io import BytesIO
-from matplotlib.offsetbox import (OffsetImage, AnnotationBbox)
 from matplotlib.colors import LinearSegmentedColormap
 
 from helpers.helper_dictionaries import position_groups
-from helpers.helper_functions import get_start_locations, get_pass_end_locations
 
 
 def player_minutes_by_match_and_position(focus_player_id):

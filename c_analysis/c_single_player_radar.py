@@ -37,8 +37,6 @@ def create_player_radar(focus_player_id, profile, position_group, min_minutes):
     filtered_player_row = player_df[
         (player_df["player_id"] == focus_player_id)]
 
-    print(filtered_player_row.to_string())
-
     player_name = filtered_player_row["player"].iloc[0]
     player_team = filtered_player_row["team"].iloc[0]
     player_minutes = filtered_player_row["total_time_minutes"].iloc[0]

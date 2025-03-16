@@ -1,12 +1,9 @@
-import pandas as pd
 import matplotlib.pyplot as plt
-from mplsoccer import VerticalPitch
-from highlight_text import ax_text
+import pandas as pd
 from matplotlib.colors import LinearSegmentedColormap
+from mplsoccer import VerticalPitch
 
-from helpers.helper_dictionaries import position_groups
-from helpers.helper_functions import get_start_locations, get_carry_end_locations, get_pass_end_locations, \
-    calculate_action_distance, assign_zone_to_start_thirds
+from helpers.helper_functions import get_start_locations, assign_zone_to_start_thirds
 
 
 def player_ball_recoveries_map(focus_player_id):

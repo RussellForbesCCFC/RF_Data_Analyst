@@ -1,13 +1,10 @@
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import seaborn as sns
-import requests
-import matplotlib
 from PIL import Image
-from io import BytesIO
-from matplotlib.offsetbox import (OffsetImage, AnnotationBbox)
 from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.offsetbox import (OffsetImage, AnnotationBbox)
 
 from helpers.position_group_metrics import profile_metrics_dict
 
@@ -30,29 +27,6 @@ def scale_weighted_average(row, df):
     min_z_weighted = df["z_score_weighted_average"].min()
     scaled_z_score = (player_z_weighted_average - min_z_weighted) / (max_z_weighted - min_z_weighted)
     return scaled_z_score
-
-
-# def filter_if_player_above_all_z_scores(z_score_list, row, min_value):
-#     over_z_score_counter = 0
-#     for met in z_score_list:
-#         player_z_score_value = row[met]
-#         if player_z_score_value < min_value:
-#             over_z_score_counter += 1
-#
-#     return over_z_score_counter
-#
-#
-# def filter_if_player_above_all_percentiles(percentile_list, row, min_value):
-#     percentile_under_min_value_counter = 0
-#     for met in percentile_list:
-#         player_z_score_value = row[met]
-#         if player_z_score_value < min_value:
-#             percentile_under_min_value_counter += 1
-#
-#     if percentile_under_min_value_counter == 0:
-#         return True
-#     else:
-#         return False
 
 
 def calculate_profile_ranks(profile, position_group, min_minutes):
@@ -88,14 +62,7 @@ def calculate_profile_ranks(profile, position_group, min_minutes):
     data_df["z_score_weighted_average"] = data_df[metric_z_score_names_weighted].mean(axis=1)
     data_df["z_score_weighted_average_scaled"] = data_df.apply(lambda row_: scale_weighted_average(row_, data_df),
                                                                axis=1)
-    # print(data_df.to_string())
-    # print(data_df[
-    #           (data_df["tackles_and_interceptions_per_90_percentile"] >= .5)
-    #           & (data_df["ball_recoveries_per_90_percentile"] >= .5)
-    #           & (data_df["progressive_carries_from_own_half_per_90_percentile"] >= .5)
-    #           & (data_df["passes_made_in_final_third_per_90_percentile"] >= .5)
-    #           & (data_df["total_np_xg_per_90_percentile"] >= .5)
-    #           & (data_df["open_play_xga_per_90_percentile"] >= .5)].to_string())
+
     # average z score
     ranked_players = data_df.sort_values("z_score_weighted_average", ascending=False).head(10)
 

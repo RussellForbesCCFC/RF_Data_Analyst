@@ -1,14 +1,7 @@
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
-import matplotlib
-import matplotlib.patheffects as path_effects
-from matplotlib import gridspec
-from matplotlib.colors import Normalize
-import matplotlib.cm as cm
+import numpy as np
+import pandas as pd
 from PIL import Image
-from io import BytesIO
 from matplotlib.offsetbox import (OffsetImage, AnnotationBbox)
 
 from helpers.helper_functions import get_start_locations, get_pass_end_locations
@@ -99,7 +92,7 @@ def player_team_z_scores(focus_player_id):
     pressure_events_df = player_events_df[player_events_df['type'] == "Pressure"].copy()
 
     pressure_events_df[['location_x', 'location_y']] = pressure_events_df.apply(
-        lambda row: pd.Series(get_start_locations(row)), axis=1)
+        lambda row_: pd.Series(get_start_locations(row_)), axis=1)
 
     team_pressures = pressure_events_df[
         (pressure_events_df['type'] == "Pressure")]["team"].value_counts().rename("pressures")
@@ -121,7 +114,7 @@ def player_team_z_scores(focus_player_id):
 
     defensive_actions_df = defensive_actions_df.copy()
     defensive_actions_df[['location_x', 'location_y']] = defensive_actions_df.apply(
-        lambda row: pd.Series(get_start_locations(row)), axis=1)
+        lambda row_: pd.Series(get_start_locations(row_)), axis=1)
 
     team_defensive_action_height = defensive_actions_df.groupby(
         ['team'])[
@@ -142,10 +135,10 @@ def player_team_z_scores(focus_player_id):
 
     # box cross %
     all_pass_events[['location_x', 'location_y']] = all_pass_events.apply(
-        lambda row: pd.Series(get_start_locations(row)), axis=1)
+        lambda row_: pd.Series(get_start_locations(row_)), axis=1)
 
     all_pass_events[['end_location_x', 'end_location_y']] = all_pass_events.apply(
-        lambda row: pd.Series(get_pass_end_locations(row)), axis=1)
+        lambda row_: pd.Series(get_pass_end_locations(row_)), axis=1)
 
     all_passes_into_box = all_pass_events[
         (all_pass_events['pass_type'] != "Corner") &
@@ -199,7 +192,6 @@ def player_team_z_scores(focus_player_id):
         team_stats_df[f"{metric}_per_game"] = team_stats_df[metric] / team_stats_df["matches_played"]
 
     team_stats_df.reset_index(inplace=True)
-    print(team_stats_df.to_string())
 
     # FIGURE
     fig = plt.figure(figsize=(18, 4), dpi=150)

@@ -35,11 +35,6 @@ def player_shot_assist_maps(focus_player_id):
     focus_player_competition = player_events_df[
         (player_events_df["player_id"] == focus_player_id)]["competition_name"].iloc[0]
 
-    # print(player_events_df[
-    #           (player_events_df["team"] == "Spain")][["player", "player_id"]].value_counts().to_string())
-
-    # get all team possession that contain a shot
-
     focus_player_open_play_shot_assists = player_events_df[
         (player_events_df["player_id"] == focus_player_id)
         & ~(player_events_df["pass_type"].isin(["Corner", "Free Kick", "Throw-in", "Kick Off"]))

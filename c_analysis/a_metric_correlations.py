@@ -6,29 +6,6 @@ import seaborn as sns
 from helpers.position_group_metrics import profile_metrics_dict
 
 
-# metric_groups = {"in_possession": ["total_np_shots_per_90", "total_np_goals_per_90", "total_np_xg_per_90",
-#                                    "total_dribbles_per_90",
-#                                    "open_play_total_passes_per_90", "open_play_key_passes_per_90",
-#                                    "attempted_crosses_per_90", "touches_inside_box_per_90", "open_play_xga_per_90",
-#                                    "open_play_pass_goal_assist_per_90", "passes_into_final_third_per_90",
-#                                    "carries_into_final_third_per_90"],
-#
-#                  "out_of_possession": [
-#                      "tackles_and_interceptions_in_defensive_third_per_90",
-#                      "dribbled_past_per_90",
-#                      "total_aerial_duels_per_90", "ball_recoveries_per_90",
-#                      "ball_recoveries_own_half", "ball_recoveries_opp_half",
-#                      "pressures_per_90", "pressures_in_opp_half",
-#                      "pressure_regains_per_90",
-#                      "fouls_per_90", "clearances_per_90"]}
-#
-# full_metric_list = []
-# for group in metric_groups:
-#     metric_list = metric_groups[group]
-#     for el in metric_list:
-#         full_metric_list.append(el)
-
-
 def metric_correlation_check(profile, position_group):
     data_df = pd.read_csv(
         "/Users/russellforbes/PycharmProjects/RF_Data_Analyst/a_data/b_aggregated_data/player_aggregated_data.csv")

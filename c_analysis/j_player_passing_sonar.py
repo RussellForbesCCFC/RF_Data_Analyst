@@ -1,16 +1,12 @@
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
 import matplotlib
-import matplotlib.patheffects as path_effects
-from matplotlib import gridspec
-from matplotlib.colors import Normalize
 import matplotlib.cm as cm
-
-from helpers.helper_dictionaries import position_groups
-from helpers.helper_functions import get_start_locations, get_carry_end_locations, get_pass_end_locations, \
-    calculate_action_distance
+import matplotlib.patheffects as path_effects
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from matplotlib import gridspec
+from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.colors import Normalize
 
 
 def create_player_passing_sonar(focus_player_id):

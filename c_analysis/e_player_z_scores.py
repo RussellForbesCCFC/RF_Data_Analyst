@@ -1,14 +1,6 @@
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-import seaborn as sns
-import requests
-import matplotlib
-from PIL import Image
-from io import BytesIO
-from matplotlib.offsetbox import (OffsetImage, AnnotationBbox)
 from matplotlib.colors import LinearSegmentedColormap
-from highlight_text import ax_text
 
 from helpers.position_group_metrics import profile_metrics_dict
 
@@ -91,7 +83,6 @@ def create_player_z_scores(profile, position_group, min_minutes, focus_player_id
     ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [0, 0],
             color="black", lw=.5, alpha=.75, zorder=1)
 
-    print(data_df.to_string())
     # plot each metric and teams z-score
     x_start = 0.5
     for z_metric in position_group_metrics_as_list:

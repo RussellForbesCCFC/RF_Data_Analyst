@@ -1,13 +1,10 @@
-import pandas as pd
 import matplotlib.pyplot as plt
-from mplsoccer import VerticalPitch
+import pandas as pd
 from highlight_text import ax_text
 from matplotlib.colors import LinearSegmentedColormap
-from numpy.ma.core import left_shift
+from mplsoccer import VerticalPitch
 
-from helpers.helper_dictionaries import position_groups
-from helpers.helper_functions import get_start_locations, get_carry_end_locations, get_pass_end_locations, \
-    calculate_action_distance, assign_zone_to_start_thirds
+from helpers.helper_functions import get_start_locations, assign_zone_to_start_thirds
 
 
 def player_shot_maps(focus_player_id):
@@ -35,11 +32,7 @@ def player_shot_maps(focus_player_id):
     focus_player_competition = player_events_df[
         (player_events_df["player_id"] == focus_player_id)]["competition_name"].iloc[0]
 
-    # print(player_events_df[
-    #           (player_events_df["team"] == "Spain")][["player", "player_id"]].value_counts().to_string())
-
     # get all team possession that contain a shot
-
     player_np_shots = player_events_df[
         (player_events_df["player_id"] == focus_player_id)
         & (player_events_df["type"] == "Shot")
