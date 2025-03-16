@@ -46,7 +46,6 @@ def create_player_radar(focus_player_id, profile, position_group, min_minutes):
     profile_metrics = [i for i in profile_metrics_dict[profile].keys()]
 
     # PLAYER RADAR
-
     fig = plt.figure(figsize=(10, 10), dpi=100)
 
     ax = fig.add_subplot(projection='polar')

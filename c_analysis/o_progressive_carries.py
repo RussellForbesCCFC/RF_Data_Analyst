@@ -1,12 +1,11 @@
-import pandas as pd
+import matplotlib.patheffects as path_effects
 import matplotlib.pyplot as plt
-from mplsoccer import VerticalPitch
-from highlight_text import ax_text
+import pandas as pd
 from matplotlib.colors import LinearSegmentedColormap
+from mplsoccer import VerticalPitch
 
-from helpers.helper_dictionaries import position_groups
-from helpers.helper_functions import get_start_locations, get_carry_end_locations, get_pass_end_locations, \
-    calculate_action_distance, assign_zone_to_start_thirds
+from helpers.helper_functions import get_start_locations, get_carry_end_locations, calculate_action_distance, \
+    assign_zone_to_start_thirds
 
 
 def player_progressive_carries_map(focus_player_id):
@@ -63,11 +62,15 @@ def player_progressive_carries_map(focus_player_id):
                           pitch_color='none',
                           half=False, line_zorder=2, corner_arcs=True,
                           linewidth=1, line_alpha=1, line_color='black',
-                          pad_left=0, pad_right=0, pad_bottom=0, pad_top=0)
+                          pad_left=4, pad_right=4, pad_bottom=4, pad_top=4)
 
     pitch.draw(ax=ax)
 
-    ax.set_facecolor("#FEFAF1")
+    ax.fill_between([0, 80],
+                    0, 120,
+                    linewidth=0,
+                    color="#fefaf1",
+                    alpha=1, zorder=1)
 
     x_plot_points = [18, 30, 50, 62]
     y_plot_points = [18, 40, 60, 80, 102]
@@ -76,6 +79,14 @@ def player_progressive_carries_map(focus_player_id):
 
     for x in x_plot_points:
         ax.plot([x, x], [0.1, 120], color='black', linewidth=.5, zorder=2, alpha=0.5, ls="--")
+
+    ax.annotate(xy=(-2, 90), xytext=(-2, 30), text='', color=title_text_color, size=16,
+                xycoords='data',
+                arrowprops=dict(arrowstyle='-|>', color=title_text_color))
+
+    ax.annotate(xy=(-2.5, 60), xytext=(-2.5, 60), text='Direction of Attack'.upper(),
+                va='center', ha="right", color=title_text_color, size=14,
+                xycoords='data', family='avenir', rotation=90)
 
     # CREATING DF OF ZONE REFERENCES -----------------------------------------------------------------------------------
     positional_y_range = [0, 18, 30, 50, 62]
@@ -129,13 +140,16 @@ def player_progressive_carries_map(focus_player_id):
         count_per_max = (count / max_start_zone)
 
         # Shading the Zone
-        end_zone_reference = zone_df[zone_df["zone_name"] == zone_ref]
+        zone_reference = zone_df[zone_df["zone_name"] == zone_ref]
 
-        end_x_start = end_zone_reference["x_start"].iloc[0]
-        end_y_start = end_zone_reference["y_start"].iloc[0]
+        end_x_start = zone_reference["x_start"].iloc[0]
+        end_y_start = zone_reference["y_start"].iloc[0]
 
-        end_x_end = end_zone_reference["x_end"].iloc[0]
-        end_y_end = end_zone_reference["y_end"].iloc[0]
+        end_x_end = zone_reference["x_end"].iloc[0]
+        end_y_end = zone_reference["y_end"].iloc[0]
+
+        x_center = zone_reference["x_center"].iloc[0]
+        y_center = zone_reference["y_center"].iloc[0]
 
         c_fill = positive_cmap(count_per_max)
 
@@ -144,20 +158,28 @@ def player_progressive_carries_map(focus_player_id):
                         end_y_end,
                         color=c_fill, alpha=.6, zorder=1, linewidth=0, edgecolor="white")
 
+        zone_percentage = count / progressive_carries.shape[0]
+        zone_percentage_string = f"{int(round(zone_percentage * 100))}%"
+        ax.text(x=x_center, y=y_center, s=zone_percentage_string,
+                ha="center", va="center", family="avenir next condensed", fontsize=16,
+                color="#fefaf1",
+                path_effects=[path_effects.Stroke(linewidth=2, foreground="black", alpha=1),
+                              path_effects.Normal()])
+
     pitch.arrows(progressive_carries["location_x"], progressive_carries["location_y"],
                  progressive_carries["end_location_x"], progressive_carries["end_location_y"],
                  color="powderblue", ec='black', linewidth=.5,
-                 ax=ax, width=2, headwidth=4.5, headlength=4.5, alpha=1, zorder=2)
+                 ax=ax, width=2, headwidth=4.5, headlength=4.5, alpha=.5, zorder=2)
 
     # FIGURE
-    fig.text(x=.5125, y=.97, s=f"Progressive Carries".upper(),
+    fig.text(x=.5125, y=.95, s=f"Progressive Carries".upper(),
              color=title_text_color,
              family="avenir next condensed",
              fontsize=32, ha="center", va="center")
 
-    fig.text(x=.5125, y=.92,
+    fig.text(x=.5125, y=.9,
              s=f"Pitch Shows all progressive Carries made by {focus_player_name}\n"
-               f"Progressive Carries are carries that travel over 10m\n"
+               f"Progressive Carries are carries that travel over 5m\n"
                f"and at least 10% of the remaining distance towards goal".upper(),
              color=title_text_color,
              family="avenir",

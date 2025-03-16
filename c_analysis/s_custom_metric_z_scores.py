@@ -65,7 +65,7 @@ def single_metric_player_z_scores(focus_player_id, metric_name, profile, positio
                 sym = "%"
             else:
                 player_metric_value = round(player_metric_value, 2)
-                sym = "%"
+                sym = ""
 
             player_text = (f"{focus_player_name}\n"
                            f"{player_metric_value}{sym}\n"
@@ -101,9 +101,13 @@ def single_metric_player_z_scores(focus_player_id, metric_name, profile, positio
     plt.close()
 
 
-single_metric_player_z_scores(6655, "open_play_forward_pass_percentage", "box_to_box", "Central / Defensive Midfielder",
+single_metric_player_z_scores(6655, "ball_recoveries_per_90", "box_to_box",
+                              "Central / Defensive Midfielder",
                               300)
 
 # metrics entered
 # all_touches_per_90
 # progressive_passes_per_90
+# open play forward pass percentage
+# progressive_carries_per_90
+# progressive_carries_from_own_half_per_90
